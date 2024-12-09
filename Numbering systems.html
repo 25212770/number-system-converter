@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number System Converter</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: purple;
+            background-size: cover;
+            background-position: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 8px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, button:focus {
+            border-color: #ff6f61;
+            outline: none;
+        }
+
+        button {
+            background-color: #ff6f61;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff3b2e;
+        }
+
+        .result {
+            padding: 15px;
+            background-color: #f8f8f8;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Number System Converter</h1>
+        <label for="numberInput">Enter the number to convert:</label>
+        <input type="text" id="numberInput" placeholder="Enter number" oninput="convertNumber()">
+
+        <label for="fromBase">Select the base of the input number:</label>
+        <select id="fromBase" onchange="convertNumber()">
+            <option value="2">Binary (Base 2)</option>
+            <option value="8">Octal (Base 8)</option>
+            <option value="10">Decimal (Base 10)</option>
+            <option value="16">Hexadecimal (Base 16)</option>
+        </select>
+
+        <label for="toBase">Select the base to convert to:</label>
+        <select id="toBase" onchange="convertNumber()">
+            <option value="2">Binary (Base 2)</option>
+            <option value="8">Octal (Base 8)</option>
+            <option value="10">Decimal (Base 10)</option>
+            <option value="16">Hexadecimal (Base 16)</option>
+        </select>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function convertNumber() {
+            const numberInput = document.getElementById('numberInput').value.trim();
+            const fromBase = parseInt(document.getElementById('fromBase').value);
+            const toBase = parseInt(document.getElementById('toBase').value);
+            const resultElement = document.getElementById('result');
+
+            // Clear result if input is empty
+            if (!numberInput) {
+                resultElement.innerHTML = "";
+                return;
+            }
+
+            let decimalValue;
+
+            // Try converting input to decimal based on the input base
+            try {
+                decimalValue = convertToDecimal(numberInput, fromBase);
+                if (isNaN(decimalValue)) {
+                    throw new Error("Invalid number input");
+                }
+
+                const convertedValue = convertFromDecimal(decimalValue, toBase);
+                resultElement.innerHTML = `<strong>Converted Number:</strong> ${convertedValue}`;
+            } catch (error) {
+                resultElement.innerHTML = `<span class="error">Error: Invalid input or conversion.</span>`;
+            }
+        }
+
+        function convertToDecimal(input, base) {
+            switch (base) {
+                case 2: return parseInt(input, 2);  // Binary to Decimal
+                case 8: return parseInt(input, 8);  // Octal to Decimal
+                case 10: return parseInt(input, 10); // Decimal to Decimal
+                case 16: return parseInt(input, 16); // Hexadecimal to Decimal
+                default: throw new Error("Unsupported input base");
+            }
+        }
+
+        function convertFromDecimal(decimalValue, base) {
+            switch (base) {
+                case 2: return decimalValue.toString(2);  // Decimal to Binary
+                case 8: return decimalValue.toString(8);  // Decimal to Octal
+                case 10: return decimalValue.toString(10); // Decimal to Decimal (no change)
+                case 16: return decimalValue.toString(16).toUpperCase();  // Decimal to Hexadecimal
+                default: throw new Error("Unsupported output base");
+            }
+        }
+
+        const gifs = [
+            'https://i.pinimg.com/originals/93/f0/4b/93f04b4b1103cc4e6410bb4f831acb6c.gif',
+            'https://i.pinimg.com/originals/65/4d/94/654d946e7b573c0b3cc9f91cc276326d.gif',
+            'https://c.tenor.com/D8s8TiQnPgEAAAAd/tenor.gif',
+        ];
+
+        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+        document.body.style.backgroundImage = `url(${randomGif})`;
+</body>
+</html>
